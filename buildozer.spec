@@ -4,6 +4,9 @@ title = Detectores Rn
 package.name = detectoresrn
 package.domain = org.example
 
+version = 1.0.0
+version.regex = __version__ = ['"](.*)['"]
+
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 source.include_patterns = assets/*,*.kv
