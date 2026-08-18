@@ -1,0 +1,396 @@
+#:import dp kivy.metrics.dp
+#:import ScreenManager kivy.uix.screenmanager.ScreenManager
+
+<CentroCard>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: dp(62)
+    padding: dp(12)
+    spacing: dp(2)
+    background_color: (0.95, 0.95, 0.95, 1) if self.state == "normal" else (0.8, 0.9, 1, 1)
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(6)]
+    Label:
+        text: root.text
+        markup: True
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+        color: (0.1, 0.1, 0.1, 1)
+
+<DetectorCard>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: dp(60)
+    padding: dp(10)
+    spacing: dp(2)
+    background_color: (0.95, 0.95, 0.95, 1) if self.state == "normal" else (0.8, 0.9, 1, 1)
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(6)]
+    Label:
+        text: root.text
+        markup: True
+        halign: "left"
+        valign: "center"
+        text_size: self.size
+        color: (0.1, 0.1, 0.1, 1)
+
+ScreenManager:
+    HomeScreen:
+        name: "home"
+    CentroScreen:
+        name: "centro"
+    DetectorScreen:
+        name: "detector"
+
+<HomeScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(12)
+        spacing: dp(8)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(52)
+            spacing: dp(8)
+            Label:
+                text: "Centros registrados"
+                font_size: dp(20)
+                bold: True
+                size_hint_x: 2
+            Button:
+                text: "⚙"
+                font_size: dp(24)
+                size_hint_x: None
+                width: dp(52)
+                on_release: root.abrir_ajustes()
+        BoxLayout:
+            size_hint_y: None
+            height: dp(48)
+            spacing: dp(8)
+            Spinner:
+                id: centro_spinner
+                text: "Selecciona un centro"
+                size_hint_x: 2
+            Button:
+                text: "Abrir centro"
+                size_hint_x: 1
+                on_release: root.abrir_centro_seleccionado()
+        ScrollView:
+            BoxLayout:
+                id: centros_container
+                orientation: "vertical"
+                spacing: dp(6)
+                size_hint_y: None
+                height: self.minimum_height
+        Button:
+            text: "+ Crear nuevo centro"
+            size_hint_y: None
+            height: dp(48)
+            background_color: (0.2, 0.6, 0.9, 1)
+            on_release: root.crear_centro_popup()
+
+<CentroScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(6)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(48)
+            spacing: dp(8)
+            Button:
+                text: "← Volver"
+                size_hint_x: None
+                width: dp(60)
+                on_release: root.volver()
+            Label:
+                id: centro_titulo
+                text: "Centro"
+                font_size: dp(18)
+                bold: True
+            Label:
+                id: centro_subtitulo
+                text: ""
+                font_size: dp(14)
+                color: (0.4, 0.4, 0.4, 1)
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                spacing: dp(8)
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(4)
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_y: None
+                    height: dp(220)
+                    Label:
+                        text: "Datos del centro"
+                        font_size: dp(16)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(28)
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(40)
+                        Label:
+                            text: "Nombre"
+                            size_hint_x: None
+                            width: dp(80)
+                        TextInput:
+                            id: nombre_input
+                            multiline: False
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(40)
+                        Label:
+                            text: "Zona"
+                            size_hint_x: None
+                            width: dp(80)
+                        TextInput:
+                            id: zona_input
+                            multiline: False
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(40)
+                        Label:
+                            text: "Fecha"
+                            size_hint_x: None
+                            width: dp(80)
+                        TextInput:
+                            id: fecha_medicion_input
+                            multiline: False
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(44)
+                        spacing: dp(8)
+                        Image:
+                            id: imagen_exterior_preview
+                            size_hint_x: None
+                            width: dp(44)
+                            source: ""
+                        Button:
+                            text: "Imagen exterior"
+                            on_release: root.adjuntar_imagen_exterior()
+                        Button:
+                            text: "Guardar cambios"
+                            background_color: (0.2, 0.7, 0.3, 1)
+                            on_release: root.guardar_cambios_centro()
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    Label:
+                        text: "Detectores colocados"
+                        font_size: dp(16)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(28)
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(44)
+                        spacing: dp(8)
+                        Button:
+                            text: "Colocar nuevo detector"
+                            background_color: (0.2, 0.6, 0.9, 1)
+                            on_release: root.colocar_nuevo_detector()
+                        Button:
+                            id: editar_detectores_btn
+                            text: "Editar detectores"
+                            on_release: root.toggle_modo_edicion()
+                    ScrollView:
+                        size_hint_y: None
+                        height: dp(160)
+                        BoxLayout:
+                            id: detectores_container
+                            orientation: "vertical"
+                            spacing: dp(4)
+                            size_hint_y: None
+                            height: self.minimum_height
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    Label:
+                        text: "Fotos para adjuntar al informe"
+                        font_size: dp(16)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(28)
+                    ScrollView:
+                        size_hint_y: None
+                        height: dp(160)
+                        BoxLayout:
+                            id: fotos_container
+                            orientation: "vertical"
+                            spacing: dp(2)
+                            size_hint_y: None
+                            height: self.minimum_height
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(44)
+                        spacing: dp(8)
+                        Button:
+                            text: "Seleccionar todas"
+                            on_release: root.seleccionar_todas_fotos()
+                        Button:
+                            text: "Generar PDF y enviar"
+                            background_color: (0.0, 0.6, 0.0, 1)
+                            on_release: root.generar_pdf_y_compartir()
+
+<DetectorScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(6)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(44)
+            spacing: dp(8)
+            Button:
+                text: "Cancelar"
+                size_hint_x: None
+                width: dp(60)
+                on_release: root.cancelar()
+            Label:
+                id: detector_titulo
+                text: "Nuevo detector"
+                font_size: dp(18)
+                bold: True
+            Label:
+                id: detector_centro_label
+                text: ""
+                font_size: dp(14)
+                color: (0.4, 0.4, 0.4, 1)
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                spacing: dp(8)
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(4)
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_y: None
+                    height: dp(180)
+                    Label:
+                        text: "Datos del detector"
+                        font_size: dp(16)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(28)
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(40)
+                        Label:
+                            text: "Planta"
+                            size_hint_x: None
+                            width: dp(70)
+                        TextInput:
+                            id: planta_input
+                            multiline: False
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(40)
+                        Label:
+                            text: "Sala"
+                            size_hint_x: None
+                            width: dp(70)
+                        TextInput:
+                            id: sala_input
+                            multiline: False
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(40)
+                        Label:
+                            text: "Fecha"
+                            size_hint_x: None
+                            width: dp(70)
+                        TextInput:
+                            id: fecha_input
+                            multiline: False
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(40)
+                        Label:
+                            text: "Codigo"
+                            size_hint_x: None
+                            width: dp(70)
+                        TextInput:
+                            id: detector_input
+                            multiline: False
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_y: None
+                    height: dp(260)
+                    Label:
+                        text: "Plano de situacion"
+                        font_size: dp(16)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(28)
+                    Button:
+                        text: "Anadir plano"
+                        size_hint_y: None
+                        height: dp(36)
+                        on_release: root.adjuntar_plano()
+                    PlanoMarcador:
+                        id: plano_widget
+                        size_hint_y: None
+                        height: dp(180)
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_y: None
+                    height: dp(160)
+                    Label:
+                        text: "Fotografias"
+                        font_size: dp(16)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(28)
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(44)
+                        spacing: dp(8)
+                        Image:
+                            id: foto_situacion_preview
+                            size_hint_x: None
+                            width: dp(40)
+                            source: ""
+                        Button:
+                            text: "Foto situacion"
+                            on_release: root.foto_situacion()
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(44)
+                        spacing: dp(8)
+                        Image:
+                            id: foto_detector_preview
+                            size_hint_x: None
+                            width: dp(40)
+                            source: ""
+                        Button:
+                            text: "Foto detector"
+                            on_release: root.foto_detector()
+                Button:
+                    text: "Guardar detector y salir"
+                    size_hint_y: None
+                    height: dp(48)
+                    background_color: (0.2, 0.7, 0.3, 1)
+                    on_release: root.guardar_y_salir()
